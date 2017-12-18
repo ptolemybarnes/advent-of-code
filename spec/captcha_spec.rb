@@ -25,6 +25,20 @@ describe 'captcha' do
     end
   end
 
+  NUMBERS_TO_EXPECTATIONS_2 = [
+    [ 1212,     6 ],
+    [ 1221,     0 ],
+    [ 123425,   4 ],
+    [ 123123,   12 ],
+    [ 12131415, 4 ]
+  ]
+
+  it 'finds the sum of all digits that match the digit ahead by half the length of the list' do
+    NUMBERS_TO_EXPECTATIONS_2.each do |number, expectation|
+      expect("#{number} => #{captcha_two(number)}").to eq "#{number} => #{expectation}"
+    end
+  end
+
   def captcha number
     number = number.to_s.chars
     number.push number.first
@@ -32,4 +46,14 @@ describe 'captcha' do
       .select {|first, second| first === second }
       .sum {|first, _| first.to_i }
   end
+
+  def captcha_two input
+    numbers = input.to_s.chars.map(&:to_i)
+    half_of_length = numbers.length / 2
+    numbers.each_with_index
+      .map {|num, idx| [num, numbers[(idx + half_of_length) % numbers.length]] }
+      .select {|first, second| first == second }
+      .sum {|first, _| first }
+  end
 end
+

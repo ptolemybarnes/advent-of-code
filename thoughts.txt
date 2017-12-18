@@ -1,0 +1,6 @@
+[A, B, C, D, E  F]
+ 0  1  2  3  4  5
+
+INDEX OF E + 3 % 6
+
+C == B
